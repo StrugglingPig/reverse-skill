@@ -17,8 +17,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Add upstream remote
         run: |
-          upstream_path=$(grep 'upstream https://github.com' $GITHUB_WORKFLOW | sed 's/.*upstream https:\/\/github\.com\///' | sed 's/\.git.*//')
-          git remote add upstream https://github.com/${upstream_path}.git
+          git remote add upstream https://github.com/zhaoxuya520/reverse-skill.git
           git fetch upstream
       - name: Merge and push
         env:
