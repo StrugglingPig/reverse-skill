@@ -17,7 +17,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Add upstream remote
         run: |
-          git remote add upstream https://github.com/zhaoxuya520/reverse-skill.git
+          upstream_path=$(grep 'upstream https://github.com' $GITHUB_WORKFLOW | sed 's/.*upstream https:\/\/github\.com\///' | sed 's/\.git.*//')
+          git remote add upstream https://github.com/${upstream_path}.git
           git fetch upstream
       - name: Merge and push
         env:
@@ -25,7 +26,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin master
-          git merge upstream/master
-          git push https://x-access-token:$GITHUB_TOKEN@github.com/StrugglingPig/reverse-skill.git HEAD:master --force
+          fork_branch=$(git rev-parse --abbrev-ref HEAD)
+          git fetch origin ${fork_branch}
+          git merge upstream/${fork_branch}
+          git push https://x-access-token:$GITHUB_TOKEN@github.com/StrugglingPig/reverse-skill.git HEAD:${fork_branch} --force
 
